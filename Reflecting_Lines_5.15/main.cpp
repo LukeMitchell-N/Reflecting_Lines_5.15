@@ -37,7 +37,7 @@ int main()
 
         // render
         // ------
-        glClearColor(1.f, 1.f, 1.f, 1.0f);
+        glClearColor(0.f,0.f, 0.f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         ourShader.use();

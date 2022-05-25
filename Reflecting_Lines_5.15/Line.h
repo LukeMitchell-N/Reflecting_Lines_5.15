@@ -11,6 +11,8 @@
 #include <GLFW/glfw3.h>
 using namespace std;
 
+#define MAX_LEN .9
+
 
 glm::vec3 randomVec3InRange(float min, float max, bool);
 glm::vec2 randomVec2InRange(float min, float max);
@@ -57,15 +59,25 @@ class Line {
 	float velocity = .3;
 	//bool flat = true;
 
+	float currLen = 0;
+	int head = 0, tail = 0;
+
 	std::chrono::steady_clock::time_point lastUpdateTime;
 
 	
 	unsigned int VBO, VAO;
 	void init();
+	void handleExceedMaxLength(float step);
+
+	void removeTail();
+
+
 
 public:
 	vector<Point> points;
 	glm::vec3 heading{ 0, 1, 0};
+	int numPoints = 0;
+
 
 	Line();
 	Line(float);
@@ -73,6 +85,14 @@ public:
 	Line randomLine();
 	void addPoint(float, float, float, float, float, float);
 	void addPoint(Point);
+
+	void setHead(float, float);
+	void newHead();
+
+	Segment getHeadSegment();
+	Segment getTailSegment();
+	Segment getSegment(int i);
+
 	void advance();
 	void updateVAO();
 	void render();

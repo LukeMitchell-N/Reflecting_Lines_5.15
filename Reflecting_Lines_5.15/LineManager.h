@@ -3,7 +3,7 @@
 #include <iostream>
 #include <chrono>
 #include "glm/gtc/matrix_transform.hpp"
-#define FPS 30
+#define FPS 60
 
 
 class LineManager

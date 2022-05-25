@@ -1,13 +1,13 @@
 #include "LineManager.h"
 
 #define INIT_CIRCLE_RADIUS .3
-#define MAX_POINTS 10
+#define NUM_LINES 20
 
 
 LineManager::LineManager() {
 	srand(time(NULL));
 
-	for (int n = 0; n < 100; n++) {
+	for (int n = 0; n < NUM_LINES; n++) {
 		Line newLine;
 		lines.push_back(newLine);
 	}
@@ -65,17 +65,17 @@ void LineManager::handleReflection(int lineNum) {
 	if (handleBorders(l)) return;
 
 	//now we check if this line segment has just crossed through any other line segments
-	Segment thisSeg(l->points.back().pos.x, l->points.back().pos.y, l->points.at(l->points.size()-2).pos.x, l->points.at(l->points.size() - 2).pos.y);
+	Segment thisSeg = l->getHeadSegment();
 	thisSeg.getEquation();
 
 	for (int i = 0; i < lines.size(); i++) {
 		//only reflect off of other lines
 		if (i != lineNum) {
 			Line l2 = lines[i];
-			for (int j = 0; j < l2.points.size() - 1; j++) {
+			for (int j = 0; j < l2.numPoints - 1; j++) {
 
 				//get the next segment of the other line to compare against
-				Segment otherSeg(l2.points[j].pos.x, l2.points[j].pos.y, l2.points[j + 1].pos.x, l2.points[j + 1].pos.y);
+				Segment otherSeg = l2.getSegment(j);
 				otherSeg.getEquation();
 
 				//from topcoder.com: https://www.topcoder.com/thrive/articles/Geometry%20Concepts%20part%202:%20%20Line%20Intersection%20and%20its%20Applications
@@ -94,8 +94,7 @@ void LineManager::handleReflection(int lineNum) {
 						&& min(otherSeg.y1, otherSeg.y2) < y&& max(otherSeg.y1, otherSeg.y2) > y){
 
 						//shuffle the point back a bit so it doesn't always intersect the line
-						l->points.back().pos.x = x- l->heading.x *.01;
-						l->points.back().pos.y = y - l->heading.y * .01;
+						l->setHead(x - l->heading.x * .01, y - l->heading.y * .01);
 
 						setupNewPoint(l, otherSeg.heading);
 
@@ -138,10 +137,7 @@ bool LineManager::handleBorders(Line* l) {
 void LineManager::setupNewPoint(Line* l, glm::vec3 otherHeading) {
 
 	//Add a new point to move forward
-	l->addPoint(l->points.back());
-
-	//if this new point exceeds the max point number, delete the earliest point
-	if (l->points.size() > MAX_POINTS) l->points.erase(l->points.begin());	//ugly and inefficient, move to queue in future
+	l->newHead();
 
 	//and reflect the heading
 	l->heading = getNewHeading(l->heading, otherHeading);
@@ -155,7 +151,7 @@ glm::vec3 LineManager::getNewHeading(glm::vec3 headingOriginal, glm::vec3 headin
 
 	glm::vec3 reflection = glm::reflect(headingOriginal, norm);
 	
-	return reflection;
+	return glm::normalize(reflection);
 
 }
 

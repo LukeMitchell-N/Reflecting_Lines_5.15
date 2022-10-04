@@ -89,6 +89,7 @@ public:
 	void setHead(float, float);
 	void newHead();
 
+	Point getHead() { return points.at(head);  }
 	Segment getHeadSegment();
 	Segment getTailSegment();
 	Segment getSegment(int i);

@@ -23,7 +23,9 @@ int main()
 
     // build and compile our shader program
     // ------------------------------------
-    Shader ourShader("Shader.vert", "Shader.frag"); 
+    Shader lineShader("Line.vert", "Line.frag"); 
+    Shader collisionShader("Line.vert", "Collision.frag");
+
 
 
     
@@ -35,14 +37,16 @@ int main()
         // -----
         processInput(window);
 
+        //update the scene
+        lm.update();
+
+
         // render
         // ------
         glClearColor(0.f,0.f, 0.f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        ourShader.use();
-        
-       
+        lineShader.use();
         lm.render();
         
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)

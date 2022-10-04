@@ -3,12 +3,13 @@
 #include <iostream>
 #include <chrono>
 #include "glm/gtc/matrix_transform.hpp"
-#define FPS 60
+#define FPS 30
 
 
 class LineManager
 {
 	vector<Line> lines;
+	vector<Point> collisions;
 	std::chrono::steady_clock::time_point lastFrameTime;
 	double msPerFrame;
 
@@ -19,6 +20,7 @@ class LineManager
 	
 
 public:
+	void update();
 	void render();
 	void initEvenlySpaced(int);
 	LineManager();

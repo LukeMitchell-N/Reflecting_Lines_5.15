@@ -46,10 +46,13 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shader.vert">
+    <None Include="Line.vert">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="Shader.frag">
+    <None Include="Line.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="Collision.frag">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>

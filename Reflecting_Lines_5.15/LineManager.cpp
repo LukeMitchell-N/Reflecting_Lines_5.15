@@ -1,7 +1,7 @@
 #include "LineManager.h"
 
 #define INIT_CIRCLE_RADIUS .3
-#define NUM_LINES 20
+#define NUM_LINES 50
 
 
 LineManager::LineManager() {
@@ -26,9 +26,7 @@ LineManager::LineManager() {
 	lastFrameTime = std::chrono::steady_clock::now();
 }
 
-
-void LineManager::render() {
-
+void LineManager::update() {
 	chrono::steady_clock::time_point currentTime = chrono::steady_clock::now();
 
 	std::chrono::duration<double, std::milli> timeElapsed = currentTime - lastFrameTime;
@@ -45,12 +43,14 @@ void LineManager::render() {
 			lines[i].updateVAO();
 		}
 	}
+}
 
-	//always render the scene/each line each time render is called
+
+void LineManager::render() {
+	//render the scene/each line each time render is called
 	for (int i = 0; i < lines.size(); i++) {
 		lines[i].render();
 	}
-
 }
 
 
@@ -95,6 +95,9 @@ void LineManager::handleReflection(int lineNum) {
 
 						//shuffle the point back a bit so it doesn't always intersect the line
 						l->setHead(x - l->heading.x * .01, y - l->heading.y * .01);
+
+						//add this point to the collisions vector
+						collisions.push_back(l->getHead());
 
 						setupNewPoint(l, otherSeg.heading);
 

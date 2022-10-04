@@ -85,6 +85,12 @@ void Line::advance() {
 	//check if this line has met its max length and needs to be shortened
 	handleExceedMaxLength(step);
 
+
+	//also add the milliseconds elapsed since the last update to the age of all the points
+	for (int i = 0; i < points.size()-1; i++) {
+		points.at(i).age += msElapsed;
+	}
+
 	/*
 	points.back().pos.x = pos.x;
 	points.back().pos.y = pos.y;
@@ -136,6 +142,7 @@ void Line::addRandomPoint() {
 }
 
 void Line::addPoint(Point p) {
+	p.age = 0;
 	points.push_back(p);
 	numPoints++;
 	if (numPoints!=1) head++;
